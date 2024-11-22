@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,15 +10,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // import { ThemedView } from '@/components/ThemedView';
 // import { IconSymbol } from '@/components/ui/IconSymbol';
 
-export default function TabTwoScreen() {
+export default function AddNotes() {
   const [text, setText] = useState("");
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <TextInput
         label="Enter Notes"
         value={text}
         mode="outlined"
+        style={styles.textInput}
+        multiline={true}
         onChangeText={(text) => setText(text)}
       />
       <Button
@@ -114,7 +116,15 @@ export default function TabTwoScreen() {
   );
 }
 
+const windowWidth = Dimensions.get('window').width - 50;
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+  },
   headerImage: {
     color: "#808080",
     bottom: -90,
@@ -124,5 +134,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     gap: 8,
+  },
+  textInput: {
+    width: windowWidth,
+    height: 50,
+    borderRadius: 10,
   },
 });
