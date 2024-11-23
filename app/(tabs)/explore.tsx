@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,18 +15,17 @@ export default function AddNotes() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.headerText}>New Notes</Text>
+
       <TextInput
-        label="Enter Notes"
+        label="Add your notes here"
         value={text}
         mode="outlined"
         style={styles.textInput}
         multiline={true}
         onChangeText={(text) => setText(text)}
       />
-      <Button
-        mode="contained"
-        onPress={() => console.log("Pressed")}
-      >
+      <Button mode="contained" onPress={() => console.log("Pressed")}>
         Save
       </Button>
     </SafeAreaView>
@@ -116,28 +115,25 @@ export default function AddNotes() {
   );
 }
 
-const windowWidth = Dimensions.get('window').width - 50;
+const windowWidth = Dimensions.get("window").width - 50;
+// const heightWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     gap: 10,
   },
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingLeft: 15,
   },
   textInput: {
     width: windowWidth,
-    height: 50,
+    // height: 100,
+    // paddingTop: 10,
     borderRadius: 10,
   },
 });
