@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import { Collapsible } from '@/components/Collapsible';
 // import { ExternalLink } from '@/components/ExternalLink';
@@ -10,8 +11,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // import { ThemedView } from '@/components/ThemedView';
 // import { IconSymbol } from '@/components/ui/IconSymbol';
 
+
+
 export default function AddNotes() {
-  const [text, setText] = useState("");
+  const [note, setNote] = useState("");
+
+  const storeNote = async() => {
+    const value = await AsyncStorage.getItem("NOTES");
+    const n = value ? JSON.parse(value) : [];
+    n.push(note)
+    await AsyncStorage.setItem("NOTES", JSON.stringify(n))
+    .then(() => {
+      console.log("NAVIGATION HERE");
+    })
+  }
 
   return (
     <SafeAreaView style={styles.container}>

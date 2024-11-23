@@ -1,6 +1,8 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, ScrollView } from "react-native";
 import { List, Divider } from "react-native-paper";
+
+
 // import { HelloWave } from "@/components/HelloWave";
 
 export default function HomeScreen() {
