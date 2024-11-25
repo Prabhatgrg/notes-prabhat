@@ -32,11 +32,11 @@ export default function AddNotes() {
 
       <TextInput
         label="Add your notes here"
-        value={text}
+        value={note}
         mode="outlined"
         style={styles.textInput}
         multiline={true}
-        onChangeText={(text) => setText(text)}
+        onChangeText={(text) => setNote(text)}
       />
       <Button mode="contained" onPress={() => console.log("Pressed")}>
         Save
