@@ -1,9 +1,14 @@
 import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from "@react-native-community/netinfo";
 
+// import * as FileSystem from "expo-file-system";
+import { cacheDirectory, downloadAsync } from "expo-file-system";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Note } from ".";
+import { NOTES_DIRECTORY } from ".";
 // import { Collapsible } from '@/components/Collapsible';
 // import { ExternalLink } from '@/components/ExternalLink';
 // import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -11,21 +16,70 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { ThemedView } from '@/components/ThemedView';
 // import { IconSymbol } from '@/components/ui/IconSymbol';
 
+NetInfo.fetch().then((state) => {
+  console.log("Connection type", state.type);
+  console.log("Is connected?", state.isConnected);
+});
 
+// const unsubscribe = NetInfo.addEventListener(state => {
+//   console.log('Connection type', state.type);
+//   console.log('Is connected?', state.isConnected);
+// });
+
+// unsubscribe();
 
 export default function AddNotes() {
   const [note, setNote] = useState("");
+  const [isConnected, setIsConnected] = useState<boolean>(true);
 
-  const storeNote = async() => {
-    const value = await AsyncStorage.getItem("NOTES");
-    const n = value ? JSON.parse(value) : [];
-    n.push(note)
-    await AsyncStorage.setItem("NOTES", JSON.stringify(n))
-    .then(() => {
-      console.log("NAVIGATION HERE");
-    })
-  }
+  useEffect(() => {
+    // Subscribe to network state updates
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected ?? !isConnected);
+    });
 
+    // Unsubscribe when the component is unmounted
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const checkConnection = () => {
+    NetInfo.fetch().then((state) => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+    });
+  };
+
+  // const storeNote = async() => {
+  //   const value = await AsyncStorage.getItem("NOTES");
+  //   const n = value ? JSON.parse(value) : [];
+  //   n.push(note)
+  //   await AsyncStorage.setItem("NOTES", JSON.stringify(n))
+  //   .then(() => {
+  //     console.log("NAVIGATION HERE");
+  //   })
+  // }
+
+  // const addNewNotes = async () => {
+  //   const newNote = {
+  //     name: `note_${new Date().getTime()}.txt`,
+  //     content: note,
+  //   };
+
+  //   try {
+  //     await FileSystem.writeAsStringAsync(
+  //       NOTES_DIRECTORY + newNote.name,
+  //       newNote.content
+  //     );
+
+  //     setNote("");
+  //   } catch (error) {
+  //     console.error("Error saving the note:", error);
+  //   }
+
+  // await FileSystem.writeAsStringAsync(NOTES_DIRECTORY + newNote.name, newNote.content);
+  // setNote("");
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headerText}>New Notes</Text>
@@ -36,11 +90,23 @@ export default function AddNotes() {
         mode="outlined"
         style={styles.textInput}
         multiline={true}
-        onChangeText={(text) => setNote(text)}
+        onChangeText={setNote}
       />
-      <Button mode="contained" onPress={() => console.log("Pressed")}>
-        Save
-      </Button>
+      {/* <Button mode="contained" onPress={addNewNotes}>
+          Save
+        </Button> */}
+      {isConnected ? (
+        <>
+          <Text>App is online</Text>
+          <Button mode="contained" onPress={checkConnection}>
+            Save
+          </Button>
+        </>
+      ) : (
+        <>
+          <Text>App is offline</Text>
+        </>
+      )}
     </SafeAreaView>
     // <ParallaxScrollView
     //   headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}

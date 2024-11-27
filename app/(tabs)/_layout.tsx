@@ -49,6 +49,14 @@ export default function TabLayout() {
           // tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="viewQueue"
+        options={{
+          title: 'View Queues',
+          tabBarIcon: ({ color }) => <MaterialIcons name="view-list" size={24} color={ color } />,
+          // tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
