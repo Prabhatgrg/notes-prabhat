@@ -10,9 +10,9 @@ NetInfo.fetch().then((state) => {
   console.log("Is connected?", state.isConnected);
 });
 
-export interface Note {
-  name: string;
-}
+// export interface Note {
+//   name: string;
+// }
 
 export default function AddNotes() {
   const [note, setNote] = useState<string>("");
@@ -30,9 +30,12 @@ export default function AddNotes() {
     };
   }, []);
 
-  const addNewNotes = async(): Promise<void> => {
+  const addNewNotes = async() => {
     try{
-      await AsyncStorage.setItem('Note', JSON.stringify(note));
+      const value = await AsyncStorage.getItem("Note");
+      const n = value ? JSON.parse(value) : [];
+      n.push(note);
+      await AsyncStorage.setItem("Note", JSON.stringify(n));
       setNote('');
       console.log("Notes Added");
     }catch (error) {
