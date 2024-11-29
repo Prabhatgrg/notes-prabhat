@@ -20,10 +20,8 @@ export default function HomeScreen() {
       const value = await AsyncStorage.getItem('Note');
       if(value != null){
         try{
-          // const parsedNote = JSON.parse(value);
           setNotes(JSON.parse(value));
           console.log("Note Data: " + value);
-          // setNotes(value);
         }catch(jsonError){
           console.error("Error parsing stored notes data: " + jsonError);
         }
@@ -34,7 +32,6 @@ export default function HomeScreen() {
       if(error instanceof Error){
         console.error("Error Message : " + error.message);
         console.error("Error Stack: " + error.stack);
-        // console.log("Error retrieving notes: " + error);
       }
     }
   }
@@ -49,10 +46,6 @@ export default function HomeScreen() {
     }
   }
 
-  // useEffect(() => {
-  //   getNotes();
-  // }, [])
-
   useFocusEffect(
     useCallback(() => {
       getNotes();
@@ -61,23 +54,19 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ paddingTop: 15 }}>
-        <Text style={styles.headerText}>Create Notes</Text>
+      <View style={styles.listStyle}>
+        <Text style={styles.headerText}>My Notes</Text>
         <Divider />
-        {/* <List.Item title="First Item" style={styles.listStyle} /> */}
         <FlatList 
           data={notes}
-          // horizontal={true}
           keyExtractor={(item, index) => index.toString()}
-          // keyExtractor={(item) => item}
-          style={styles.listStyle}
           renderItem={({ item }) => (
             <View style={styles.noteContainer}>
               <Text>{item}</Text>
             </View>
           )}
         />
-        <Button mode="contained" onPress={clearNote}>
+        <Button mode="contained" onPress={clearNote} style={{ marginBottom: 20}}>
           Clear Notes
         </Button>
       </View>
@@ -90,9 +79,9 @@ const styles = StyleSheet.create({
   container:{
     flex: 1
   },
+
   listStyle: {
-    // width: windowWidth,
-    height: 100,
+    flex: 1, 
   },
   noteContainer: {
     backgroundColor: '#f0f0f0',

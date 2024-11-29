@@ -30,18 +30,23 @@ export default function AddNotes() {
     };
   }, []);
 
-  const addNewNotes = async() => {
-    try{
-      const value = await AsyncStorage.getItem("Note");
-      const n = value ? JSON.parse(value) : [];
-      n.push(note);
-      await AsyncStorage.setItem("Note", JSON.stringify(n));
-      setNote('');
-      console.log("Notes Added");
-    }catch (error) {
-      console.log("Error adding note: ", error);
-    };
-  }
+  const addNewNotes = async () => {
+    const regex = /^\s/;
+    if (regex.test(note) || note.trim() === "") {
+      console.log("Please enter a note");
+    }else{
+      try {
+        const value = await AsyncStorage.getItem("Note");
+        const n = value ? JSON.parse(value) : [];
+        n.push(note);
+        await AsyncStorage.setItem("Note", JSON.stringify(n));
+        setNote("");
+        console.log("Notes Added");
+      } catch (error) {
+        console.log("Error adding note: ", error);
+      }
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
