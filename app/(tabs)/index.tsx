@@ -6,74 +6,40 @@ import {
   Button,
   FlatList,
   View,
-  PermissionsAndroid,
-  Platform,
 } from "react-native";
-import { List, Divider } from "react-native-paper";
+import { Divider } from "react-native-paper";
 import { useState, useEffect } from "react";
-import { useFocusEffect } from "expo-router";
-import * as FileSystem from "expo-file-system";
-
-// import { HelloWave } from "@/components/HelloWave";
-
-export interface Note {
-  name: string;
-  content: string;
-}
-
-export const NOTES_DIRECTORY = "/storage/emulated/0/NotesData/";
-
-// Request permission for Android 11+ (API Level 30)
-// const requestManageExternalStoragePermission = async () => {
-//   if (Platform.OS === 'android' && Platform.Version >= 30) {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.MANAGE_EXTERNAL_STORAGE
-//     );
-    
-//     if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-//       console.log('Permission denied for MANAGE_EXTERNAL_STORAGE');
-//       return false;
-//     }
-//   }
-//   return true;
-// };
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Note } from "./explore";
 
 export default function HomeScreen() {
-  const getNotes = async (): Promise<Note[]> => {
-    const files = await FileSystem.readDirectoryAsync(NOTES_DIRECTORY);
-    console.log("Note Data: ", files);
-
-    const notes: Note[] = [];
-
-    for (const file of files) {
-      const content = await FileSystem.readAsStringAsync(
-        NOTES_DIRECTORY + file
-      );
-      notes.push({ name: file, content });
-    }
-    return notes;
-
-    // const notes = await Promise.all(
-    //   files.map(async(file) => {
-    //     const content = await FileSystem.readAsStringAsync(NOTES_DIRECTORY + file);
-    //     return content;
-    //   })
-    // );
-  };
   const [notes, setNotes] = useState<Note[]>([]);
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const fetchedNotes = await getNotes();
-      setNotes(fetchedNotes);
-    };
-    fetchNotes();
-  }, []);
+  const getNotes = async() => {
+    try{
+      const value = await AsyncStorage.getItem('Note');
+      if(value != null){
+        try{
+          const parsedNote: Note[] = JSON.parse(value);
+          setNotes(parsedNote);
+        }catch(jsonError){
+          console.error("Error parsing stored notes data: " + jsonError);
+        }
+      }else{
+        console.log("There is no notes available. Please add notes to view them");
+      }
+    }catch (error){
+      if(error instanceof Error){
+        console.error("Error Message : " + error.message);
+        console.error("Error Stack: " + error.stack);
+        // console.log("Error retrieving notes: " + error);
+      }
+    }
+  }
 
-  const fileDirectoryName = () => {
-    console.log(FileSystem.documentDirectory);
-  };
+  useEffect(() => {
+    getNotes();
+  }, [])
 
   return (
     <SafeAreaView>
@@ -87,11 +53,10 @@ export default function HomeScreen() {
           style={styles.listStyle}
           renderItem={({ item }) => (
             <View>
-              <Text>{item.content}</Text>
+              <Text>{item.name}</Text>
             </View>
           )}
         />
-        {/* <Button onPress={fileDirectoryName} title="Get File Directory Name" /> */}
       </View>
     </SafeAreaView>
   );
