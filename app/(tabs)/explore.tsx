@@ -1,15 +1,15 @@
 import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "expo-router";
+import { NoteContext } from "../NoteContext";
 
-NetInfo.fetch().then((state) => {
-  console.log("Connection type", state.type);
-  console.log("Is connected?", state.isConnected);
-});
+// NetInfo.fetch().then((state) => {
+//   console.log("Connection type", state.type);
+//   console.log("Is connected?", state.isConnected);
+// });
 
 // export interface Note {
 //   name: string;
@@ -17,62 +17,49 @@ NetInfo.fetch().then((state) => {
 
 export default function AddNotes() {
   const [note, setNote] = useState<string>("");
-  const [isConnected, setIsConnected] = useState<boolean>(true);
-  const [queueTask, setQueueTask] = useState([]);
+  const { isConnected, setQueueTask, queueTask } = useContext(NoteContext);
+  // const [isConnected, setIsConnected] = useState<boolean>(true);
+  // const [queueTask, setQueueTask] = useState([]);
 
-  // useEffect(() => {
-  //   // Subscribe to network state updates
-  //   const unsubscribe = NetInfo.addEventListener((state) => {
-  //     setIsConnected(state.isConnected ?? !isConnected);
-  //     if (state.isConnected) {
-  //       syncNotes();
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // Subscribe to network state updates
+  //     const unsubscribe = NetInfo.addEventListener((state) => {
+  //       setIsConnected(state.isConnected ?? !isConnected);
+  //       // if (state.isConnected) {
+  //       //   syncNotes();
+  //       // }
+  //     });
+
+  //     // Unsubscribe when the component is unmounted
+  //     return () => {
+  //       unsubscribe();
+  //     };
+  //   }, [])
+  // );
+
+  // const syncNotes = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("QueuedNotes");
+  //     if (value) {
+  //       const noteQueue = JSON.parse(value);
+  //       if (noteQueue.length > 0) {
+  //         const currentNotes = await AsyncStorage.getItem("Note");
+  //         const newNotes = currentNotes
+  //           ? [...JSON.parse(currentNotes), ...noteQueue]
+  //           : noteQueue;
+  //         await AsyncStorage.setItem("Note", JSON.stringify(newNotes));
+
+  //         // Clear Queued Notes
+  //         await AsyncStorage.removeItem("QueuedNotes");
+  //         console.log("Noted Removed from Queue");
+  //         setQueueTask([]);
+  //       }
   //     }
-  //   });
-
-  //   // Unsubscribe when the component is unmounted
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      // Subscribe to network state updates
-      const unsubscribe = NetInfo.addEventListener((state) => {
-        setIsConnected(state.isConnected ?? !isConnected);
-        if (state.isConnected) {
-          syncNotes(); }
-      });
-
-      // Unsubscribe when the component is unmounted
-      return () => {
-        unsubscribe();
-      };
-    }, [])
-  );
-
-  const syncNotes = async () => {
-    try {
-      const value = await AsyncStorage.getItem("QueuedNotes");
-      if (value) {
-        const noteQueue = JSON.parse(value);
-        if (noteQueue.length > 0) {
-          const currentNotes = await AsyncStorage.getItem("Note");
-          const newNotes = currentNotes
-            ? [...JSON.parse(currentNotes), ...noteQueue]
-            : noteQueue;
-          await AsyncStorage.setItem("Note", JSON.stringify(newNotes));
-
-          // Clear Queued Notes
-          await AsyncStorage.removeItem("QueuedNotes");
-          console.log("Noted Removed from Queue");
-          setQueueTask([]);
-        }
-      }
-    } catch (error) {
-      console.error("Error syncing notes: " + error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error syncing notes: " + error);
+  //   }
+  // };
 
   const addNewNotes = async () => {
     if (isConnected) {
@@ -98,6 +85,7 @@ export default function AddNotes() {
         n.push(note);
         await AsyncStorage.setItem("QueuedNotes", JSON.stringify(n));
         setQueueTask(n);
+        console.log("Queued Notes Are: " + queueTask);
         setNote("");
         console.log("Notes added to the queue.");
       } catch (error) {
