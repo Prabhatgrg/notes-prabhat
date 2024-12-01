@@ -5,6 +5,8 @@ node_modules/
 
 # Expo
 .expo/
+android/gradle.properties
+android/app/notes-prabhat-key.keystore
 dist/
 web-build/
 expo-env.d.ts
