@@ -6,6 +6,7 @@ import { useFocusEffect } from "expo-router";
 export const NoteContext = createContext();
 
 const NotesProvider = ({ children }) => {
+  // const [note, setNote] = useState("");
   const [queueTask, setQueueTask] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
 
@@ -35,6 +36,37 @@ const NotesProvider = ({ children }) => {
     }
   };
 
+  const addNewNotes = async (note) => {
+    if (isConnected) {
+      const regex = /^\s/;
+      if (regex.test(note) || note.trim() === "") {
+        console.log("Please enter a note");
+      } else {
+        try {
+          const value = await AsyncStorage.getItem("Note");
+          const n = value ? JSON.parse(value) : [];
+          n.push(note);
+          await AsyncStorage.setItem("Note", JSON.stringify(n));
+          console.log("Notes Added");
+        } catch (error) {
+          console.log("Error adding note: ", error);
+        }
+      }
+    } else {
+      try {
+        const value = await AsyncStorage.getItem("QueuedNotes");
+        const n = value ? JSON.parse(value) : [];
+        n.push(note);
+        await AsyncStorage.setItem("QueuedNotes", JSON.stringify(n));
+        setQueueTask(n);
+        console.log("Queued Notes Are: " + queueTask);
+        setNote("");
+        console.log("Notes added to the queue.");
+      } catch (error) {
+        console.error("Error trying to queue task: " + error);
+      }
+    }
+  };
   useFocusEffect(
     useCallback(() => {
       // Subscribe to network state updates
@@ -53,8 +85,7 @@ const NotesProvider = ({ children }) => {
   );
   return (
     <NoteContext.Provider
-      value={{ queueTask, setQueueTask, syncNotes, isConnected }}
-      i
+      value={{ queueTask, setQueueTask, addNewNotes, syncNotes, isConnected }}
     >
       {children}
     </NoteContext.Provider>
