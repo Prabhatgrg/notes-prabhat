@@ -7,16 +7,17 @@ import { NoteContext } from "../NoteContext";
 // import { Note } from "./explore";
 
 export default function HomeScreen() {
-  const { getNotes, notes, syncNotes, clearNote, isConnected } = useContext(NoteContext);
+  const { fetchNotes, notes, syncNotes, clearNote, isConnected } = useContext(NoteContext);
 
   useFocusEffect(
     useCallback(() => {
-      getNotes();
+      // getNotes();
+      fetchNotes();
       console.log("Internet Access: " + isConnected);
-      if (isConnected) {
-        console.log("Syncing Notes.....");
-        syncNotes();
-      }
+      // if (isConnected) {
+      //   console.log("Syncing Notes.....");
+      //   syncNotes();
+      // }
     }, [isConnected])
   );
 
