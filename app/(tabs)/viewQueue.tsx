@@ -1,44 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState, useContext, useCallback } from "react";
-import { StyleSheet, Text, FlatList, View, Dimensions } from "react-native";
+import { useContext, useCallback } from "react";
+import { StyleSheet, Text, FlatList, View } from "react-native";
 import { Divider, Button } from "react-native-paper";
 import { useFocusEffect } from "expo-router";
-import { SharedTransitionType } from "react-native-reanimated";
+import { NoteContext } from "../NoteContext";
 
 export default function ViewQueue() {
-  const [queuedNotes, setQueuedNotes] = useState([]);
-
-  const getQueuedNotes = async () => {
-    try {
-      const value = await AsyncStorage.getItem("QueuedNotes");
-      if (value != null) {
-        try {
-          setQueuedNotes(JSON.parse(value));
-          console.log("QUEUED NOTE: " + value);
-        } catch (error) {
-          console.error("Error fetching queued note: " + error);
-        }
-      } else {
-        console.log("No Queued notes available");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error Message : " + error.message);
-        console.error("Error Stack: " + error.stack);
-      }
-    }
-  };
-
-  const clearQueuedNotes = async () => {
-    try {
-      await AsyncStorage.removeItem("QueuedNotes");
-      console.log("Queued Notes has been deleted");
-      setQueuedNotes([]);
-    } catch (error) {
-      console.error("Error trying to delete queued notes: " + error);
-    }
-  };
+  const { queuedNotes, getQueuedNotes, clearQueuedNotes } =
+    useContext(NoteContext);
 
   useFocusEffect(
     useCallback(() => {
@@ -62,7 +31,7 @@ export default function ViewQueue() {
         />
         <Button
           mode="contained"
-            onPress={clearQueuedNotes}
+          onPress={clearQueuedNotes}
           style={{ marginBottom: 20 }}
         >
           Clear Queued Notes

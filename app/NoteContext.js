@@ -7,7 +7,9 @@ export const NoteContext = createContext();
 
 const NotesProvider = ({ children }) => {
   // const [note, setNote] = useState("");
+  const [notes, setNotes] = useState([]);
   const [queueTask, setQueueTask] = useState([]);
+  const [queuedNotes, setQueuedNotes] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
 
   const syncNotes = async () => {
@@ -60,13 +62,79 @@ const NotesProvider = ({ children }) => {
         await AsyncStorage.setItem("QueuedNotes", JSON.stringify(n));
         setQueueTask(n);
         console.log("Queued Notes Are: " + queueTask);
-        setNote("");
+        // setNote("");
         console.log("Notes added to the queue.");
       } catch (error) {
         console.error("Error trying to queue task: " + error);
       }
     }
   };
+
+  const getNotes = async () => {
+    try {
+      const value = await AsyncStorage.getItem("Note");
+      if (value != null) {
+        try {
+          setNotes(JSON.parse(value));
+          console.log("Note Data: " + value);
+        } catch (jsonError) {
+          console.error("Error parsing stored notes data: " + jsonError);
+        }
+      } else {
+        console.log(
+          "There is no notes available. Please add notes to view them"
+        );
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error Message : " + error.message);
+        console.error("Error Stack: " + error.stack);
+      }
+    }
+  };
+
+  const clearNote = async () => {
+    try {
+      await AsyncStorage.removeItem("Note");
+      console.log("All Notes Deleted");
+      setNotes([]);
+    } catch (error) {
+      console.error("Error deleting notes: " + error);
+    }
+  };
+
+
+  const getQueuedNotes = async () => {
+    try {
+      const value = await AsyncStorage.getItem("QueuedNotes");
+      if (value != null) {
+        try {
+          setQueuedNotes(JSON.parse(value));
+          console.log("QUEUED NOTE: " + value);
+        } catch (error) {
+          console.error("Error fetching queued note: " + error);
+        }
+      } else {
+        console.log("No Queued notes available");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error Message : " + error.message);
+        console.error("Error Stack: " + error.stack);
+      }
+    }
+  };
+
+  const clearQueuedNotes = async () => {
+    try {
+      await AsyncStorage.removeItem("QueuedNotes");
+      console.log("Queued Notes has been deleted");
+      setQueuedNotes([]);
+    } catch (error) {
+      console.error("Error trying to delete queued notes: " + error);
+    }
+  };
+  
   useFocusEffect(
     useCallback(() => {
       // Subscribe to network state updates
@@ -85,7 +153,19 @@ const NotesProvider = ({ children }) => {
   );
   return (
     <NoteContext.Provider
-      value={{ queueTask, setQueueTask, addNewNotes, syncNotes, isConnected }}
+      value={{
+        queueTask,
+        setQueueTask,
+        getNotes,
+        notes,
+        addNewNotes,
+        syncNotes,
+        clearNote,
+        queuedNotes,
+        getQueuedNotes,
+        clearQueuedNotes,
+        isConnected,
+      }}
     >
       {children}
     </NoteContext.Provider>
