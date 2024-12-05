@@ -1,19 +1,22 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, FlatList, View, Dimensions } from "react-native";
 import { Divider, Button } from "react-native-paper";
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, useEffect } from "react";
 import { useFocusEffect } from "expo-router";
 import { NoteContext } from "../NoteContext";
 // import { Note } from "./explore";
 
 export default function HomeScreen() {
-  const { fetchNotes, notes, syncNotes, clearNote, isConnected } = useContext(NoteContext);
+  const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
+    useContext(NoteContext);
 
+  // const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   useFocusEffect(
     useCallback(() => {
       // getNotes();
       fetchNotes();
       console.log("Internet Access: " + isConnected);
+      // console.log("API URL: ", `${apiUrl}/notes`);
       // if (isConnected) {
       //   console.log("Syncing Notes.....");
       //   syncNotes();
@@ -28,10 +31,10 @@ export default function HomeScreen() {
         <Divider />
         <FlatList
           data={notes}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.noteContainer}>
-              <Text>{item}</Text>
+              <Text>{item.content}</Text>
             </View>
           )}
         />

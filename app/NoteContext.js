@@ -13,6 +13,8 @@ const NotesProvider = ({ children }) => {
   const [queuedNotes, setQueuedNotes] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
 
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
   const syncNotes = async () => {
     try {
       console.log("Sync Started");
@@ -73,14 +75,7 @@ const NotesProvider = ({ children }) => {
 
   const addNewNotes = async (note) => {
     try {
-      // const response = await fetch(`${process.env.API_URL}/notes`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(note),
-      // });
-      const response = await fetch("http://192.168.1.72:5000/api/notes", {
+      const response = await fetch(`${apiUrl}/notes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,19 +84,14 @@ const NotesProvider = ({ children }) => {
       });
       const responseData = await response.json();
       if(!response.ok) {
-        // const errorData = await response.json();
         throw new Error(
           `Failed to create new notes: ${
             responseData.message || response.statusText
           }`
         );
       } else {
-        // await response.json();
         console.log("New note created successfully: ", responseData);
       }
-      // Get the data from the response
-      // const responseData = await response.json();
-      // console.log("New Note Created:", responseData);
     } catch (error) {
       console.error("Error adding note: ", error.message);
       throw error;
@@ -110,19 +100,18 @@ const NotesProvider = ({ children }) => {
 
   const fetchNotes = async () => {
     try {
-      // const response = await fetch(`${process.env.API_URL}/notes`, {
-      //   method: 'GET',
-      // });
-      const response = await fetch("http://192.168.1.72:5000/api/notes", {
+      const response = await fetch(`${apiUrl}/notes`, {
         method: "GET",
       });
+      const responseData = await response.json()
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error(
           `Failed to fetching notes: ${
-            errorData.message || response.statusText
+            responseData.message || response.statusText
           }`
         );
+      }else{
+        setNotes(responseData);
       }
     } catch (error) {
       console.error("Error fetching note: ", error.message);
