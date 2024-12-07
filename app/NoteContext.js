@@ -2,44 +2,135 @@ import React, { createContext, useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "expo-router";
-import { SharedTransitionType } from "react-native-reanimated";
 
 export const NoteContext = createContext();
 
 const NotesProvider = ({ children }) => {
   // const [note, setNote] = useState("");
   const [notes, setNotes] = useState([]);
-  const [queueTask, setQueueTask] = useState([]);
+  // const [queueTask, setQueueTask] = useState([]);
   const [queuedNotes, setQueuedNotes] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
+  // const syncNotes = async () => {
+  //   try {
+  //     console.log("Sync Started");
+  //     const value = await AsyncStorage.getItem("QueuedNotes");
+  //     console.log("Queued Note: " + value);
+  //     if (value) {
+  //       console.log("Queued Note: " + value);
+  //       const noteQueue = JSON.parse(value);
+  //       if (noteQueue.length > 0) {
+  //         const currentNotes = await AsyncStorage.getItem("Note");
+  //         const newNotes = currentNotes
+  //           ? [...JSON.parse(currentNotes), ...noteQueue]
+  //           : noteQueue;
+
+  //         await AsyncStorage.setItem("Note", JSON.stringify(newNotes));
+  //         await AsyncStorage.removeItem("QueuedNotes");
+
+  //         console.log("Notes removed from queue and synced");
+  //         setQueueTask([]);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error syncing notes: " + error);
+  //   }
+  // };
+
+  /*
+    SYNC NOTES NOTE WORKING USING FOR LOOP AND RESPONSE.JSON()
+  */
   const syncNotes = async () => {
     try {
-      console.log("Sync Started");
       const value = await AsyncStorage.getItem("QueuedNotes");
+      const parsedNotes = JSON.parse(value);
       console.log("Queued Note: " + value);
       if (value) {
+        console.log("Sync Started");
         console.log("Queued Note: " + value);
-        const noteQueue = JSON.parse(value);
-        if (noteQueue.length > 0) {
-          const currentNotes = await AsyncStorage.getItem("Note");
-          const newNotes = currentNotes
-            ? [...JSON.parse(currentNotes), ...noteQueue]
-            : noteQueue;
-
-          await AsyncStorage.setItem("Note", JSON.stringify(newNotes));
-          await AsyncStorage.removeItem("QueuedNotes");
-
-          console.log("Notes removed from queue and synced");
-          setQueueTask([]);
+        for (const note of parsedNotes) {
+          try {
+            const response = await fetch(`${apiUrl}/notes`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ content: note }),
+            });
+            const responseData = await response.json();
+            if (!response.ok) {
+              throw new Error(
+                `Failed to create new notes: ${
+                  responseData.message || response.statusText
+                }`
+              );
+            }
+          } catch (error) {
+            console.error("Failed to sync notes: ", error);
+          }
         }
+        // const responseData = await response.json();
+        await AsyncStorage.removeItem("QueuedNotes");
+        console.log("Queued Notes Removed Successfully");
       }
     } catch (error) {
-      console.error("Error syncing notes: " + error);
+      if (error instanceof Error) {
+        console.error("Error Message: ", error.message);
+        console.error("Error Stack: ", error.stack);
+        console.error("Error syncing notes: " + error);
+      }
     }
   };
+  // const syncNotes = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("QueuedNotes");
+
+  //     if (value) {
+  //       const parsedNotes = JSON.parse(value);
+  //       console.log("Sync Started");
+  //       console.log("Queued Notes: ", parsedNotes);
+
+  //       for (const note of parsedNotes) {
+  //         try {
+  //           const response = await fetch(`${apiUrl}/notes`, {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify({ content: note }),
+  //           });
+
+  //           const responseData = await response.json(); // Moved this inside the loop
+
+  //           if (!response.ok) {
+  //             console.error("Failed Response Data: ", responseData);
+  //             throw new Error(
+  //               `Failed to create new note: ${
+  //                 responseData.message || response.statusText
+  //               }`
+  //             );
+  //           }
+
+  //           console.log("New note created successfully: ", responseData);
+  //         } catch (error) {
+  //           console.error("Failed to sync note: ", note);
+  //           console.error("Error: ", error.message || error);
+  //         }
+  //       }
+
+  //       // All notes synced successfully, clear AsyncStorage
+  //       await AsyncStorage.removeItem("QueuedNotes");
+  //       console.log("Queued Notes Removed Successfully");
+  //     } else {
+  //       console.log("No queued notes to sync.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error syncing notes: ", error.message || error);
+  //   }
+  // };
 
   // const addNewNotes = async (note) => {
   //   if (isConnected) {
@@ -73,24 +164,98 @@ const NotesProvider = ({ children }) => {
   //   }
   // };
 
+  // const addNewNotes = async (note) => {
+  //   try {
+  //     const response = await fetch(`${apiUrl}/notes`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ content: note }),
+  //     });
+  //     const responseData = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         `Failed to create new notes: ${
+  //           responseData.message || response.statusText
+  //         }`
+  //       );
+  //     } else {
+  //       console.log("New note created successfully: ", responseData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding note: ", error.message);
+  //     throw error;
+  //   }
+  // };
+
+  /* 
+  Check regex expression without offline mode
+  */
+  // const addNewNotes = async (note) => {
+  //   const regex = /^\s/;
+  //   try {
+  //     if (regex.test(note) || note.trim() === "") {
+  //       console.error("Enter a proper note please");
+  //     }else{
+  //       const response = await fetch(`${apiUrl}/notes`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ content: note }),
+  //       });
+  //       const responseData = await response.json();
+  //       if (!response.ok) {
+  //         throw new Error(
+  //           `Failed to create new notes: ${
+  //             responseData.message || response.statusText
+  //           }`
+  //         );
+  //       } else {
+  //         console.log("New note created successfully: ", responseData);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding note: ", error.message);
+  //     throw error;
+  //   }
+  // };
+
+  /* 
+  Check regex expression with offline mode
+  */
   const addNewNotes = async (note) => {
+    const regex = /^\s/;
     try {
-      const response = await fetch(`${apiUrl}/notes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: note }),
-      });
-      const responseData = await response.json();
-      if(!response.ok) {
-        throw new Error(
-          `Failed to create new notes: ${
-            responseData.message || response.statusText
-          }`
-        );
+      if (isConnected) {
+        if (regex.test(note) || note.trim() === "") {
+          console.error("Enter a proper note please");
+        } else {
+          const response = await fetch(`${apiUrl}/notes`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content: note }),
+          });
+          const responseData = await response.json();
+          if (!response.ok) {
+            throw new Error(
+              `Failed to create new notes: ${
+                responseData.message || response.statusText
+              }`
+            );
+          } else {
+            console.log("New note created successfully: ", responseData);
+          }
+        }
       } else {
-        console.log("New note created successfully: ", responseData);
+        const value = await AsyncStorage.getItem("QueuedNotes");
+        const n = value ? JSON.parse(value) : [];
+        n.push(note);
+        await AsyncStorage.setItem("QueuedNotes", JSON.stringify(n));
+        console.log("Notes will be save when online");
       }
     } catch (error) {
       console.error("Error adding note: ", error.message);
@@ -98,19 +263,59 @@ const NotesProvider = ({ children }) => {
     }
   };
 
+  // const addNewNotes = async (note) => {
+  //   try {
+  //     if (isConnected) {
+  //       const regex = /^\s/;
+  //       if (regex.test(note) || note.trim === "") {
+  //         const response = await fetch(`${apiUrl}/notes`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ content: note }),
+  //         });
+  //         const responseData = await response.json();
+  //         if (!response.ok) {
+  //           throw new Error(
+  //             `Failed to create new notes: ${
+  //               responseData.message || response.statusText
+  //             }`
+  //           );
+  //         } else {
+  //           console.log("New note created successfully: ", responseData);
+  //         }
+  //       }else{
+  //         try{
+  //           const value = await AsyncStorage.getItem("Note");
+  //           const n = value ? JSON.parse(value) : [];
+  //           n.push(note);
+  //           await AsyncStorage.setItem("Note", JSON.stringify(n));
+  //           console.log("Notes will be send when online");
+  //         }catch(error){
+  //           console.log("Error sending notes to backend: ", error);
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding note: ", error.message);
+  //     throw error;
+  //   }
+  // };
+
   const fetchNotes = async () => {
     try {
       const response = await fetch(`${apiUrl}/notes`, {
         method: "GET",
       });
-      const responseData = await response.json()
+      const responseData = await response.json();
       if (!response.ok) {
         throw new Error(
           `Failed to fetching notes: ${
             responseData.message || response.statusText
           }`
         );
-      }else{
+      } else {
         setNotes(responseData);
       }
     } catch (error) {
@@ -202,8 +407,8 @@ const NotesProvider = ({ children }) => {
   return (
     <NoteContext.Provider
       value={{
-        queueTask,
-        setQueueTask,
+        // queueTask,
+        // setQueueTask,
         // getNotes,
         notes,
         addNewNotes,

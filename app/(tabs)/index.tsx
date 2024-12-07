@@ -17,10 +17,10 @@ export default function HomeScreen() {
       fetchNotes();
       console.log("Internet Access: " + isConnected);
       // console.log("API URL: ", `${apiUrl}/notes`);
-      // if (isConnected) {
-      //   console.log("Syncing Notes.....");
-      //   syncNotes();
-      // }
+      if (isConnected) {
+        console.log("Syncing Notes.....");
+        syncNotes();
+      }
     }, [isConnected])
   );
 
