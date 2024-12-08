@@ -1,15 +1,19 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, FlatList, View, Dimensions } from "react-native";
 import { Divider, Button } from "react-native-paper";
-import { useContext, useCallback, useEffect } from "react";
+import { useContext, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 import { NoteContext } from "../NoteContext";
 // import { Note } from "./explore";
+import NetInfo from "@react-native-community/netinfo";
 
 export default function HomeScreen() {
-  const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
+  const { printNotes, fetchNotes, notes, syncNotes, clearNote, isConnected } =
     useContext(NoteContext);
-
+  NetInfo.fetch().then((state) => {
+    console.log("Connection type", state.type);
+    console.log("Is connected?", state.isConnected);
+  });
   // const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   useFocusEffect(
     useCallback(() => {
