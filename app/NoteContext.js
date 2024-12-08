@@ -303,6 +303,27 @@ const NotesProvider = ({ children }) => {
   //   }
   // };
 
+  // const fetchNotes = async () => {
+  //   try {
+  //     const response = await fetch(`${apiUrl}/notes`, {
+  //       method: "GET",
+  //     });
+  //     const responseData = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         `Failed to fetching notes: ${
+  //           responseData.message || response.statusText
+  //         }`
+  //       );
+  //     } else {
+  //       setNotes(responseData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching note: ", error.message);
+  //     throw error;
+  //   }
+  // };
+
   const fetchNotes = async () => {
     try {
       const response = await fetch(`${apiUrl}/notes`, {
@@ -316,13 +337,50 @@ const NotesProvider = ({ children }) => {
           }`
         );
       } else {
-        setNotes(responseData);
+        for (const note of responseData) {
+          const jsonValue = JSON.stringify(note);
+          await AsyncStorage.setItem("Note", jsonValue);
+          console.log("Iterating Notes: ", jsonValue);
+          // await AsyncStorage.setItem('Note', note.id);
+          // await AsyncStorage.setItem('Note', note.content);
+        }
       }
     } catch (error) {
-      console.error("Error fetching note: ", error.message);
-      throw error;
+      console.error("Erroring Fetching Notes: ", error);
     }
   };
+  /*
+    Fetch Notes and Save to AsyncStorage
+  */
+  // const fetchNotes = async () => {
+  //   try {
+  //     if (isConnected) {
+  //       const response = await fetch(`${apiUrl}/notes`, {
+  //         method: "GET",
+  //       });
+  //       const responseData = await response.json();
+  //       if (!response.ok) {
+  //         throw new Error(
+  //           `Failed to fetching notes: ${
+  //             responseData.message || response.statusText
+  //           }`
+  //         );
+  //       } else {
+  //         for (const note of responseData) {
+  //           const jsonValue = JSON.stringify(note);
+  //           await AsyncStorage.setItem("Note", jsonValue);
+  //           console.log("Iterating Notes: ", jsonValue);
+  //           // await AsyncStorage.setItem('Note', note.id);
+  //           // await AsyncStorage.setItem('Note', note.content);
+  //         }
+  //       }
+  //     } else {
+  //       console.log("Notes will be fetched once online");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error Fetching Notes: ", error);
+  //   }
+  // };
 
   // const getNotes = async () => {
   //   try {
