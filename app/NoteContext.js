@@ -13,7 +13,6 @@ const NotesProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(true);
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
   // const syncNotes = async () => {
   //   try {
   //     console.log("Sync Started");
@@ -47,7 +46,7 @@ const NotesProvider = ({ children }) => {
     try {
       const value = await AsyncStorage.getItem("QueuedNotes");
       const parsedNotes = JSON.parse(value);
-      console.log("Queued Note: " + value);
+      // console.log("Queued Note: " + value);
       if (value) {
         console.log("Sync Started");
         console.log("Queued Note: " + value);
@@ -303,26 +302,92 @@ const NotesProvider = ({ children }) => {
   //   }
   // };
 
-  const fetchNotes = async () => {
+  /* 
+    Fetch Data from backend and store it on AsyncStorage
+  */
+  // const fetchNotes = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem("Note");
+  //     if (value != null) {
+  //       setNotes(JSON.parse(value));
+  //       console.log("NOTE FROM ASYNC STORAGE OFFLINE: ", value);
+  //     } else {
+  //       console.log("THE NOTE VALUE RETURNS NULL");
+  //     }
+  //     if (isConnected) {
+  //       const response = await fetch(`${apiUrl}/notes`, {
+  //         method: "GET",
+  //       });
+  //       const responseData = await response.json();
+  //       if (!response.ok) {
+  //         throw new Error(
+  //           `Failed to Fetch Notes from backend: ${
+  //             responseData.message || responseData.statusText
+  //           }`
+  //         );
+  //       } else {
+  //         await AsyncStorage.setItem("Note", JSON.stringify(responseData));
+  //         setNotes(responseData);
+  //         console.log("Note Value is :", notes);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log("Failed to fetch data: ", error);
+  //   }
+  // };
+const fetchNotes = async () => {
     try {
-      const response = await fetch(`${apiUrl}/notes`, {
-        method: "GET",
-      });
-      const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetching notes: ${
-            responseData.message || response.statusText
-          }`
-        );
+      if (isConnected) {
+        const response = await fetch(`${apiUrl}/notes`, {
+          method: "GET",
+        });
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(
+            `Failed to Fetch Notes from backend: ${
+              responseData.message || responseData.statusText
+            }`
+          );
+        } else {
+          await AsyncStorage.setItem("Note", JSON.stringify(responseData));
+          setNotes(responseData);
+        }
       } else {
-        setNotes(responseData);
+        const value = await AsyncStorage.getItem("Note");
+        if (value != null) {
+          setNotes(JSON.parse(value));
+        } else {
+          console.log("THE NOTE VALUE RETURNS NULL");
+        }
       }
     } catch (error) {
-      console.error("Error fetching note: ", error.message);
-      throw error;
+      console.log("Failed to fetch data: ", error);
     }
   };
+
+  /*
+    Fetching Data from the backend which will be use directly to show on the Flatlist component
+  */
+  // const fetchNotes = async () => {
+  //   try {
+  //     const response = await fetch(`${apiUrl}/notes`, {
+  //       method: "GET",
+  //     });
+  //     const responseData = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         `Failed to fetching notes: ${
+  //           responseData.message || response.statusText
+  //         }`
+  //       );
+  //     } else {
+  //       setNotes(responseData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching note: ", error.message);
+  //     throw error;
+  //   }
+  // };
 
   // const getNotes = async () => {
   //   try {

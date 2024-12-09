@@ -15,10 +15,10 @@ export default function HomeScreen() {
     useCallback(() => {
       // getNotes();
       fetchNotes();
-      console.log("Internet Access: " + isConnected);
+      // console.log("Internet Access: " + isConnected);
       // console.log("API URL: ", `${apiUrl}/notes`);
       if (isConnected) {
-        console.log("Syncing Notes.....");
+        // console.log("Syncing Notes.....");
         syncNotes();
       }
     }, [isConnected])
@@ -28,6 +28,7 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.listStyle}>
         <Text style={styles.headerText}>My Notes</Text>
+        {isConnected ? <Text>App Online</Text> : <Text> App Offline </Text>}
         <Divider />
         <FlatList
           data={notes}
