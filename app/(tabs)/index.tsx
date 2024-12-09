@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, FlatList, View, Dimensions } from "react-native";
 import { Divider, Button } from "react-native-paper";
-import { useContext, useCallback, useEffect } from "react";
+import { useContext, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 import { NoteContext } from "../NoteContext";
 // import { Note } from "./explore";
@@ -9,7 +9,6 @@ import { NoteContext } from "../NoteContext";
 export default function HomeScreen() {
   const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
     useContext(NoteContext);
-
   // const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   useFocusEffect(
     useCallback(() => {

@@ -490,5 +490,4 @@ const fetchNotes = async () => {
     </NoteContext.Provider>
   );
 };
-
 export default NotesProvider;
