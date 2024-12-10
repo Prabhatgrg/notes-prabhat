@@ -22,7 +22,7 @@ export default function ViewQueue() {
         <Divider />
         <FlatList
           data={queuedNotes}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.noteContainer}>
               <Text>{item}</Text>
