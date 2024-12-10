@@ -36,6 +36,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <MaterialIcons name="speaker-notes" size={24} color={color} />
             ),
+            headerShown: true,
             // tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
           }}
         />

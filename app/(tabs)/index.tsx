@@ -40,9 +40,9 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.listStyle}>
-        <Text style={styles.headerText}>My Notes</Text>
+        {/* <Text style={styles.headerText}>My Notes</Text> */}
         {isConnected ? <Text>App Online</Text> : <Text> App Offline </Text>}
-        <Divider />
+        {/* <Divider /> */}
         <FlatList
           data={notes}
           keyExtractor={(item) => item.id.toString()}
