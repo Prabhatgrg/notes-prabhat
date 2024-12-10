@@ -1,8 +1,15 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, Text, FlatList, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Divider, Button } from "react-native-paper";
 import { useContext, useCallback } from "react";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { NoteContext } from "../NoteContext";
 // import { Note } from "./explore";
 
@@ -22,7 +29,14 @@ export default function HomeScreen() {
       }
     }, [isConnected])
   );
+  const router = useRouter();
 
+  // const handlePress = () => {
+  //   router.push({
+  //     pathname: "/note/[id]",
+  //     params: { id: notes.id, content: notes.content },
+  //   });
+  // };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.listStyle}>
@@ -33,9 +47,21 @@ export default function HomeScreen() {
           data={notes}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.noteContainer}>
+            // <View style={styles.noteContainer}>
+            //   <Text>{item.content}</Text>
+            // </View>
+            <TouchableOpacity
+              style={styles.container}
+              // onPress={handlePress}
+              onPress={() => {
+                router.push({
+                  pathname: "/note/[id]",
+                  params: { id: item.id, content: item.content },
+                });
+              }}
+            >
               <Text>{item.content}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
         <Button
