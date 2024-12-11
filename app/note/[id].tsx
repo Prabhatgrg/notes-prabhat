@@ -10,7 +10,7 @@ const Note = () => {
   return (
     <>
       <SafeAreaView>
-        <Text>{id}</Text>
+        {/* <Text>{id}</Text> */}
         <Text>{content}</Text>
       </SafeAreaView>
     </>
