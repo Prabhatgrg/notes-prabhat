@@ -20,15 +20,17 @@ export default function ViewQueue() {
       <View style={styles.listStyle}>
         <Text style={styles.headerText}>My Queued Notes</Text>
         <Divider />
-        <FlatList
-          data={queuedNotes}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.noteContainer}>
-              <Text>{item}</Text>
-            </View>
-          )}
-        />
+        {queuedNotes && (
+          <FlatList
+            data={queuedNotes}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.noteContainer}>
+                <Text>{item}</Text>
+              </View>
+            )}
+          />
+        )}
         <Button
           mode="contained"
           onPress={clearQueuedNotes}

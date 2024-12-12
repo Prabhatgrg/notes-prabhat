@@ -1,4 +1,5 @@
 import React, { createContext, useState, useCallback } from "react";
+import { ToastAndroid } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useFocusEffect } from "expo-router";
@@ -42,7 +43,15 @@ const NotesProvider = ({ children }) => {
               );
             }
           } catch (error) {
-            console.error("Failed to sync notes: ", error);
+            () => {
+              ToastAndroid.show(
+                "Failed to sync note due to offline backend",
+                ToastAndroid.SHORT
+              );
+            };
+            // console.error("Failed to sync notes: ", error);
+            // console.log("Failed to sync note due to backend offline: ", error);
+            // console.log("Will Attempt to sync note again after backend is online");
           }
         }
         // const responseData = await response.json();
@@ -99,8 +108,14 @@ const NotesProvider = ({ children }) => {
     }
   };
 
-const fetchNotes = async () => {
+  const fetchNotes = async () => {
     try {
+      // const value = await AsyncStorage.getItem("Note");
+      // if (value != null) {
+      //   setNotes(JSON.parse(value));
+      // } else {
+      //   console.log("THE NOTE VALUE RETURNS NULL");
+      // }
       if (isConnected) {
         const response = await fetch(`${apiUrl}/notes`, {
           method: "GET",
@@ -108,7 +123,7 @@ const fetchNotes = async () => {
         const responseData = await response.json();
         if (!response.ok) {
           throw new Error(
-            `Failed to Fetch Notes from backend: ${
+            `Failed to Fetch Notes from backend. Notes now fetched locally: ${
               responseData.message || responseData.statusText
             }`
           );
@@ -132,6 +147,7 @@ const fetchNotes = async () => {
   const clearNote = async () => {
     try {
       await AsyncStorage.removeItem("Note");
+      ToastAndroid.show("All Notes Deleted", ToastAndroid.SHORT);
       console.log("All Notes Deleted");
       setNotes([]);
     } catch (error) {
@@ -163,6 +179,7 @@ const fetchNotes = async () => {
   const clearQueuedNotes = async () => {
     try {
       await AsyncStorage.removeItem("QueuedNotes");
+      ToastAndroid.show("Queued Notes has been deleted", ToastAndroid.SHORT);
       console.log("Queued Notes has been deleted");
       setQueuedNotes([]);
     } catch (error) {

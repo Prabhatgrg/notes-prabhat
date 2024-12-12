@@ -7,6 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 import { Divider, Button } from "react-native-paper";
 import { useContext, useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -39,9 +41,15 @@ export default function HomeScreen() {
   // };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.listStyle}>
+      <ThemedView style={styles.listStyle}>
+        {/* <View style={styles.listStyle}> */}
         {/* <Text style={styles.headerText}>My Notes</Text> */}
-        {isConnected ? <Text>App Online</Text> : <Text> App Offline </Text>}
+        {isConnected ? (
+          <ThemedText>App Online</ThemedText>
+        ) : (
+          <Text> App Offline </Text>
+        )}
+        {/* {isConnected ? <View>App Online</View> : <Text> App Offline </Text>} */}
         {/* <Divider /> */}
         <FlatList
           data={notes}
@@ -60,7 +68,8 @@ export default function HomeScreen() {
                 });
               }}
             >
-              <Text>{item.content}</Text>
+              <ThemedText>{item.content}</ThemedText>
+              {/* <Text>{item.content}</Text> */}
             </TouchableOpacity>
           )}
         />
@@ -71,7 +80,8 @@ export default function HomeScreen() {
         >
           Clear Notes
         </Button>
-      </View>
+        {/* </View> */}
+      </ThemedView>
     </SafeAreaView>
   );
 }
