@@ -4,6 +4,8 @@ import { StyleSheet, Text, FlatList, View } from "react-native";
 import { Divider, Button } from "react-native-paper";
 import { useFocusEffect } from "expo-router";
 import { NoteContext } from "../NoteContext";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function ViewQueue() {
   const { queuedNotes, getQueuedNotes, clearQueuedNotes } =
@@ -17,8 +19,8 @@ export default function ViewQueue() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.listStyle}>
-        <Text style={styles.headerText}>My Queued Notes</Text>
+      <ThemedView style={styles.listStyle}>
+        <ThemedText style={styles.headerText}>My Queued Notes</ThemedText>
         <Divider />
         {queuedNotes && (
           <FlatList
@@ -26,7 +28,7 @@ export default function ViewQueue() {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={styles.noteContainer}>
-                <Text>{item}</Text>
+                <ThemedText>{item}</ThemedText>
               </View>
             )}
           />
@@ -38,7 +40,7 @@ export default function ViewQueue() {
         >
           Clear Queued Notes
         </Button>
-      </View>
+      </ThemedView>
     </SafeAreaView>
   );
 }

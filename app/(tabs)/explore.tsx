@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import React, { useState, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemedText } from "@/components/ThemedText";
 import { NoteContext } from "../NoteContext";
 // import { Note } from "@/interface/note";
 
@@ -12,7 +12,7 @@ export default function AddNotes() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.headerText}>New Notes</Text>
+      <ThemedText style={styles.headerText}>New Notes</ThemedText>
 
       <TextInput
         label="Add your notes here"
@@ -24,11 +24,11 @@ export default function AddNotes() {
       />
       {isConnected ? (
         <>
-          <Text>App is online</Text>
+          <ThemedText>App is online</ThemedText>
         </>
       ) : (
         <>
-          <Text>App is offline</Text>
+          <ThemedText>App is offline</ThemedText>
         </>
       )}
       <Button mode="contained" onPress={() => {
