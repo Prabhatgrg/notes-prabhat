@@ -13,8 +13,22 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app
 
    ```bash
-    npx expo start
+   npx expo start
    ```
+3. Install EAS CLI
+
+    ```
+    npm install -g eas cli  
+    eas login
+    eas whoami
+    ```
+4. Build Android apk
+
+    ```
+    eas build:configure
+    eas build -p android --profile preview
+    ```
+    ## eas build -p (Platform) --profile (Profile_Name) => Access profile from eas.json file
 
 In the output, you'll find options to open the app in a
 
