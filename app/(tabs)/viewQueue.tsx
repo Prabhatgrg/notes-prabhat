@@ -18,30 +18,32 @@ export default function ViewQueue() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ThemedView style={styles.listStyle}>
-        <ThemedText style={styles.headerText}>My Queued Notes</ThemedText>
-        <Divider />
-        {queuedNotes && (
-          <FlatList
-            data={queuedNotes}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.noteContainer}>
-                <ThemedText>{item}</ThemedText>
-              </View>
-            )}
-          />
-        )}
-        <Button
-          mode="contained"
-          onPress={clearQueuedNotes}
-          style={{ marginBottom: 20 }}
-        >
-          Clear Queued Notes
-        </Button>
-      </ThemedView>
-    </SafeAreaView>
+    // <SafeAreaView style={styles.container}>
+    <ThemedView style={styles.listStyle}>
+      {/* <ThemedText style={styles.headerText}>My Queued Notes</ThemedText> */}
+      <Divider />
+      {queuedNotes &&  queuedNotes.length > 0 ? (
+        <FlatList
+          data={queuedNotes}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.noteContainer}>
+              <ThemedText>{item}</ThemedText>
+            </View>
+          )}
+        />
+      ) : (
+        <ThemedText>No Queued Notes</ThemedText>
+      )}
+      <Button
+        mode="contained"
+        onPress={clearQueuedNotes}
+        style={{ marginBottom: 20 }}
+      >
+        Clear Queued Notes
+      </Button>
+    </ThemedView>
+    // </SafeAreaView>
   );
 }
 
@@ -52,6 +54,12 @@ const styles = StyleSheet.create({
 
   listStyle: {
     flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    // gap: 10,
+    // alignItems: "center"
   },
   noteContainer: {
     backgroundColor: "#f0f0f0",
@@ -61,7 +69,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingLeft: 15,
+    paddingLeft: 8,
     marginBottom: 10,
+    marginTop: 10,
   },
 });

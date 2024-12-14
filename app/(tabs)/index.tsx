@@ -40,7 +40,7 @@ export default function HomeScreen() {
   //   });
   // };
   return (
-    <SafeAreaView style={styles.container}>
+    // <SafeAreaView style={styles.container}>
       <ThemedView style={styles.listStyle}>
         {/* <View style={styles.listStyle}> */}
         {/* <Text style={styles.headerText}>My Notes</Text> */}
@@ -82,7 +82,7 @@ export default function HomeScreen() {
         </Button>
         {/* </View> */}
       </ThemedView>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 

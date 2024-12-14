@@ -47,6 +47,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <MaterialIcons name="add-circle" size={24} color={color} />
             ),
+            headerShown: true,
             // tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.fill" color={color} />,
           }}
         />
@@ -57,6 +58,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <MaterialIcons name="view-list" size={24} color={color} />
             ),
+            headerShown: true,
             // tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.fill" color={color} />,
           }}
         />
