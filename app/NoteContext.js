@@ -187,6 +187,16 @@ const NotesProvider = ({ children }) => {
     }
   };
 
+  const editNote = async (note) => {
+    try{
+      const response = await fetch(`${apiUrl}/notes`, {
+        method: 'PATCH'
+      });
+    }catch(error) {
+      console.log("Error Editing Note: ", error);
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       // Subscribe to network state updates
