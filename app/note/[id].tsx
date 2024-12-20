@@ -5,15 +5,17 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { NoteContext } from "../NoteContext";
 import { Button, TextInput } from "react-native-paper";
+import { ThemedText } from "@/components/ThemedText";
 
 const Note = () => {
   const [note, setNote] = useState<string>("");
   const { id, content } = useLocalSearchParams();
-  // const {} = useContext(NoteContext);
+  const { editNote } = useContext(NoteContext);
   return (
     <>
       <ThemedView style={styles.container}>
         {/* <View style={styles.textInput}> */}
+        <ThemedText>ID for this note: {id}</ThemedText>
         <TextInput
           mode="outlined"
           multiline={true}
@@ -23,7 +25,15 @@ const Note = () => {
         >
           {content}
         </TextInput>
-        <Button mode="contained">Edit</Button>
+        <Button
+          mode="contained"
+          onPress={() => {
+            editNote(id, note);
+            setNote("");
+          }}
+        >
+          Edit
+        </Button>
         {/* </View> */}
       </ThemedView>
     </>
@@ -43,8 +53,8 @@ const styles = StyleSheet.create({
     width: width,
   },
   textInputContent: {
-    textAlignVertical: "auto"
-  }
+    textAlignVertical: "auto",
+  },
 });
 
 export default Note;

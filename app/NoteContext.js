@@ -2,7 +2,7 @@ import React, { createContext, useState, useCallback } from "react";
 import { ToastAndroid } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 
 export const NoteContext = createContext();
 
@@ -12,6 +12,8 @@ const NotesProvider = ({ children }) => {
   // const [queueTask, setQueueTask] = useState([]);
   const [queuedNotes, setQueuedNotes] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
+
+  const router = useRouter();
 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   /*
@@ -187,15 +189,29 @@ const NotesProvider = ({ children }) => {
     }
   };
 
-  const editNote = async (note) => {
-    try{
-      const response = await fetch(`${apiUrl}/notes`, {
-        method: 'PATCH'
+  const editNote = async (id, note) => {
+    try {
+      const response = await fetch(`${apiUrl}/notes/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: note }),
       });
-    }catch(error) {
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(`
+          Failed to Edit Note: ${
+            responseData.message || responseData.statusText
+          }`);
+      } else {
+        console.log("Edited Note Successfully: ", responseData);
+        router.push("/");
+      }
+    } catch (error) {
       console.log("Error Editing Note: ", error);
     }
-  }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -224,6 +240,7 @@ const NotesProvider = ({ children }) => {
         fetchNotes,
         syncNotes,
         clearNote,
+        editNote,
         queuedNotes,
         getQueuedNotes,
         clearQueuedNotes,
