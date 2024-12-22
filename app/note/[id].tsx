@@ -8,15 +8,20 @@ import { Button, TextInput } from "react-native-paper";
 import { ThemedText } from "@/components/ThemedText";
 
 const Note = () => {
-  const [note, setNote] = useState<string>("");
+  // const [note, setNote] = useState<string | string[]>("");
   const { id, content } = useLocalSearchParams();
+  const [note, setNote] = useState<string>(typeof content === 'string' ? content : '');
+  // const params = useLocalSearchParams();
+  // const id = params.id;
+  // const content = params.content;
   const { editNote } = useContext(NoteContext);
   return (
     <>
       <ThemedView style={styles.container}>
         {/* <View style={styles.textInput}> */}
         <ThemedText>ID for this note: {id}</ThemedText>
-        <TextInput
+        <ThemedText>{content}</ThemedText>
+        {/* <TextInput
           mode="outlined"
           multiline={true}
           style={styles.textInput}
@@ -24,11 +29,21 @@ const Note = () => {
           onChangeText={setNote}
         >
           {content}
-        </TextInput>
+        </TextInput> */}
+        <TextInput
+          mode="outlined"
+          multiline={true}
+          style={styles.textInput}
+          contentStyle={styles.textInputContent}
+          onChangeText={setNote}
+          value={note}
+          // placeholder={typeof content === "string" ? content : ""}
+        />
         <Button
           mode="contained"
           onPress={() => {
             editNote(id, note);
+            console.log("NOTE VALUE: ", note);
             setNote("");
           }}
         >
