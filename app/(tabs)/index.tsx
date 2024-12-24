@@ -1,7 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   StyleSheet,
-  Text,
   FlatList,
   View,
   Dimensions,
@@ -9,7 +8,7 @@ import {
 } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { Divider, Button } from "react-native-paper";
+import { Divider, Button, Text } from "react-native-paper";
 import { useContext, useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { NoteContext } from "../NoteContext";
@@ -41,23 +40,24 @@ export default function HomeScreen() {
   // };
   return (
     // <SafeAreaView style={styles.container}>
-      <ThemedView style={styles.listStyle}>
-        {/* <View style={styles.listStyle}> */}
-        {/* <Text style={styles.headerText}>My Notes</Text> */}
-        {isConnected ? (
-          <ThemedText>App Online</ThemedText>
-        ) : (
-          <Text> App Offline </Text>
-        )}
-        {/* {isConnected ? <View>App Online</View> : <Text> App Offline </Text>} */}
-        {/* <Divider /> */}
-        <FlatList
-          data={notes}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            // <View style={styles.noteContainer}>
-            //   <Text>{item.content}</Text>
-            // </View>
+    <ThemedView style={styles.listStyle}>
+      {/* <View style={styles.listStyle}> */}
+      {/* <Text style={styles.headerText}>My Notes</Text> */}
+      {isConnected ? (
+        <ThemedText>App Online</ThemedText>
+      ) : (
+        <Text> App Offline </Text>
+      )}
+      {/* {isConnected ? <View>App Online</View> : <Text> App Offline </Text>} */}
+      <FlatList
+        data={notes}
+        // style={styles.container}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          // <View style={styles.noteContainer}>
+          //   <Text>{item.content}</Text>
+          // </View>
+          <>
             <TouchableOpacity
               style={styles.container}
               // onPress={handlePress}
@@ -69,19 +69,16 @@ export default function HomeScreen() {
               }}
             >
               <ThemedText>{item.content}</ThemedText>
-              {/* <Text>{item.content}</Text> */}
             </TouchableOpacity>
-          )}
-        />
-        <Button
-          mode="contained"
-          onPress={clearNote}
-          style={{ marginBottom: 20 }}
-        >
-          Clear Notes
-        </Button>
-        {/* </View> */}
-      </ThemedView>
+            <Divider style={{height: 1, marginVertical: 10}} />
+          </>
+        )}
+      />
+      <Button mode="contained" onPress={clearNote} style={{ marginBottom: 20 }}>
+        Clear Notes
+      </Button>
+      {/* </View> */}
+    </ThemedView>
     // </SafeAreaView>
   );
 }
@@ -90,6 +87,7 @@ const windowWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: 40,
   },
 
   listStyle: {
