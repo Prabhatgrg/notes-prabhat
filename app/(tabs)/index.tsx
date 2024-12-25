@@ -54,9 +54,6 @@ export default function HomeScreen() {
         // style={styles.container}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          // <View style={styles.noteContainer}>
-          //   <Text>{item.content}</Text>
-          // </View>
           <>
             <TouchableOpacity
               style={styles.container}

@@ -21,15 +21,6 @@ const Note = () => {
         {/* <View style={styles.textInput}> */}
         <ThemedText>ID for this note: {id}</ThemedText>
         <ThemedText>{content}</ThemedText>
-        {/* <TextInput
-          mode="outlined"
-          multiline={true}
-          style={styles.textInput}
-          contentStyle={styles.textInputContent}
-          onChangeText={setNote}
-        >
-          {content}
-        </TextInput> */}
         <TextInput
           mode="outlined"
           multiline={true}
@@ -37,7 +28,6 @@ const Note = () => {
           contentStyle={styles.textInputContent}
           onChangeText={setNote}
           value={note}
-          // placeholder={typeof content === "string" ? content : ""}
         />
         <Button
           mode="contained"
