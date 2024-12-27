@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions, Text } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
 import { NoteContext } from "../NoteContext";

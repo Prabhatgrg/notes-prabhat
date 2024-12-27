@@ -2,7 +2,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   StyleSheet,
   FlatList,
-  View,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -12,7 +11,6 @@ import { Divider, Button, Text } from "react-native-paper";
 import { useContext, useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { NoteContext } from "../NoteContext";
-// import { Note } from "./explore";
 
 export default function HomeScreen() {
   const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
@@ -20,24 +18,14 @@ export default function HomeScreen() {
   // const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   useFocusEffect(
     useCallback(() => {
-      // getNotes();
       fetchNotes();
-      // console.log("Internet Access: " + isConnected);
-      // console.log("API URL: ", `${apiUrl}/notes`);
       if (isConnected) {
-        // console.log("Syncing Notes.....");
         syncNotes();
       }
     }, [isConnected])
   );
   const router = useRouter();
 
-  // const handlePress = () => {
-  //   router.push({
-  //     pathname: "/note/[id]",
-  //     params: { id: notes.id, content: notes.content },
-  //   });
-  // };
   return (
     // <SafeAreaView style={styles.container}>
     <ThemedView style={styles.listStyle}>
@@ -57,7 +45,6 @@ export default function HomeScreen() {
           <>
             <TouchableOpacity
               style={styles.container}
-              // onPress={handlePress}
               onPress={() => {
                 router.push({
                   pathname: "/note/[id]",

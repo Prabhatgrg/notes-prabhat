@@ -8,12 +8,8 @@ import { Button, TextInput } from "react-native-paper";
 import { ThemedText } from "@/components/ThemedText";
 
 const Note = () => {
-  // const [note, setNote] = useState<string | string[]>("");
   const { id, content } = useLocalSearchParams();
   const [note, setNote] = useState<string>(typeof content === 'string' ? content : '');
-  // const params = useLocalSearchParams();
-  // const id = params.id;
-  // const content = params.content;
   const { editNote } = useContext(NoteContext);
   return (
     <>

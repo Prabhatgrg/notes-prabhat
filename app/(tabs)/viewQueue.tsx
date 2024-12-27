@@ -58,13 +58,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    // gap: 10,
-    // alignItems: "center"
   },
   noteContainer: {
     backgroundColor: "#f0f0f0",
     padding: 10,
-    // borderRadius: 5,
   },
   headerText: {
     fontSize: 20,

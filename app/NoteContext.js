@@ -7,9 +7,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 export const NoteContext = createContext();
 
 const NotesProvider = ({ children }) => {
-  // const [note, setNote] = useState("");
   const [notes, setNotes] = useState([]);
-  // const [queueTask, setQueueTask] = useState([]);
   const [queuedNotes, setQueuedNotes] = useState([]);
   const [isConnected, setIsConnected] = useState(true);
 
@@ -232,9 +230,6 @@ const NotesProvider = ({ children }) => {
   return (
     <NoteContext.Provider
       value={{
-        // queueTask,
-        // setQueueTask,
-        // getNotes,
         notes,
         addNewNotes,
         fetchNotes,
