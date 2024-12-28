@@ -27,19 +27,14 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    // <SafeAreaView style={styles.container}>
     <ThemedView style={styles.listStyle}>
-      {/* <View style={styles.listStyle}> */}
-      {/* <Text style={styles.headerText}>My Notes</Text> */}
       {isConnected ? (
         <ThemedText>App Online</ThemedText>
       ) : (
         <Text> App Offline </Text>
       )}
-      {/* {isConnected ? <View>App Online</View> : <Text> App Offline </Text>} */}
       <FlatList
         data={notes}
-        // style={styles.container}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <>
@@ -61,13 +56,10 @@ export default function HomeScreen() {
       <Button mode="contained" onPress={clearNote} style={{ marginBottom: 20 }}>
         Clear Notes
       </Button>
-      {/* </View> */}
     </ThemedView>
-    // </SafeAreaView>
   );
 }
 
-const windowWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -80,7 +72,6 @@ const styles = StyleSheet.create({
   noteContainer: {
     backgroundColor: "#f0f0f0",
     padding: 10,
-    // borderRadius: 5,
   },
   headerText: {
     fontSize: 20,

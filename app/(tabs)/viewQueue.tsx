@@ -18,9 +18,7 @@ export default function ViewQueue() {
   );
 
   return (
-    // <SafeAreaView style={styles.container}>
     <ThemedView style={styles.listStyle}>
-      {/* <ThemedText style={styles.headerText}>My Queued Notes</ThemedText> */}
       <Divider />
       {queuedNotes &&  queuedNotes.length > 0 ? (
         <FlatList
@@ -43,7 +41,6 @@ export default function ViewQueue() {
         Clear Queued Notes
       </Button>
     </ThemedView>
-    // </SafeAreaView>
   );
 }
 

@@ -4,7 +4,6 @@ import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
 import { NoteContext } from "../NoteContext";
-// import { Note } from "@/interface/note";
 
 export default function AddNotes() {
   const [note, setNote] = useState<string>("");
@@ -13,7 +12,6 @@ export default function AddNotes() {
   return (
     <SafeAreaView style={styles.container}>
       <ThemedText style={styles.headerText}>New Notes</ThemedText>
-
       <TextInput
         label="Add your notes here"
         value={note}
@@ -42,7 +40,6 @@ export default function AddNotes() {
 }
 
 const windowWidth = Dimensions.get("window").width - 50;
-// const heightWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
@@ -58,8 +55,6 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: windowWidth,
-    // height: 100,
-    // paddingTop: 10,
     borderRadius: 10,
   },
 });

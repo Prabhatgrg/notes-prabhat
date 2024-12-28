@@ -1,7 +1,7 @@
 import React from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useState, useContext } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { NoteContext } from "../NoteContext";
 import { Button, TextInput } from "react-native-paper";
@@ -14,7 +14,6 @@ const Note = () => {
   return (
     <>
       <ThemedView style={styles.container}>
-        {/* <View style={styles.textInput}> */}
         <ThemedText>ID for this note: {id}</ThemedText>
         <ThemedText>{content}</ThemedText>
         <TextInput
@@ -35,7 +34,6 @@ const Note = () => {
         >
           Edit
         </Button>
-        {/* </View> */}
       </ThemedView>
     </>
   );
