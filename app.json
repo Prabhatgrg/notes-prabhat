@@ -38,6 +38,12 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-5odk5ou5dvai5u4r.eu.auth0.com"
+        }
       ]
     ],
     "experiments": {
