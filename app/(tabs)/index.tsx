@@ -11,6 +11,7 @@ import { Divider, Button, Text } from "react-native-paper";
 import { useContext, useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { NoteContext } from "../NoteContext";
+import Constants from 'expo-constants';
 
 export default function HomeScreen() {
   const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
@@ -26,6 +27,12 @@ export default function HomeScreen() {
   );
   const router = useRouter();
 
+  const domainName = Constants?.expoConfig?.extra?.auth0Domain;
+  const clientID = Constants?.expoConfig?.extra?.auth0ClientId;
+
+  console.log("DOMAIN NAME: ", domainName);
+  console.log("CLIENT ID: ", clientID);
+
   return (
     <ThemedView style={styles.listStyle}>
       {isConnected ? (
@@ -33,26 +40,30 @@ export default function HomeScreen() {
       ) : (
         <Text> App Offline </Text>
       )}
-      <FlatList
-        data={notes}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <>
-            <TouchableOpacity
-              style={styles.container}
-              onPress={() => {
-                router.push({
-                  pathname: "/note/[id]",
-                  params: { id: item.id, content: item.content },
-                });
-              }}
-            >
-              <ThemedText>{item.content}</ThemedText>
-            </TouchableOpacity>
-            <Divider style={{height: 1, marginVertical: 10}} />
-          </>
-        )}
-      />
+      <>
+        <Text>{domainName}</Text>
+        <Text>{clientID}</Text>
+        <FlatList
+          data={notes}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <>
+              <TouchableOpacity
+                style={styles.container}
+                onPress={() => {
+                  router.push({
+                    pathname: "/note/[id]",
+                    params: { id: item.id, content: item.content },
+                  });
+                }}
+              >
+                <ThemedText>{item.content}</ThemedText>
+              </TouchableOpacity>
+              <Divider style={{ height: 1, marginVertical: 10 }} />
+            </>
+          )}
+        />
+      </>
       <Button mode="contained" onPress={clearNote} style={{ marginBottom: 20 }}>
         Clear Notes
       </Button>
