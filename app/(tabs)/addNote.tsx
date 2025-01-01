@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,7 +22,8 @@ export default function AddNotes() {
       />
       {isConnected ? (
         <>
-          <ThemedText>App is online</ThemedText>
+          <ThemedText className="bg-red-700">App is online</ThemedText>
+          <Text className="bg-red-500 text-3xl text-green-900">BG RED HERE</Text>
         </>
       ) : (
         <>

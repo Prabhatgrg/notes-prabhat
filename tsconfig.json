@@ -11,6 +11,9 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "app/NoteContext.js"
+    "app/NoteContext.js",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
   ]
 }

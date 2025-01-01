@@ -11,7 +11,8 @@ import { Divider, Button, Text } from "react-native-paper";
 import { useContext, useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { NoteContext } from "../NoteContext";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
+import { useAuth0 } from "react-native-auth0";
 
 export default function HomeScreen() {
   const { fetchNotes, notes, syncNotes, clearNote, isConnected } =
@@ -26,17 +27,22 @@ export default function HomeScreen() {
     }, [isConnected])
   );
   const router = useRouter();
+  const { user } = useAuth0();
 
   const domainName = Constants?.expoConfig?.extra?.auth0Domain;
   const clientID = Constants?.expoConfig?.extra?.auth0ClientId;
 
   console.log("DOMAIN NAME: ", domainName);
   console.log("CLIENT ID: ", clientID);
+  console.log("USER INFO HERE: ", user);
 
   return (
     <ThemedView style={styles.listStyle}>
       {isConnected ? (
-        <ThemedText>App Online</ThemedText>
+        <>
+          <ThemedText className="text-blue-500">App Online</ThemedText>
+          <Text className="p-5 bg-blue-500">HELLO</Text>
+        </>
       ) : (
         <Text> App Offline </Text>
       )}
