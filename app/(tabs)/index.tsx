@@ -41,7 +41,7 @@ export default function HomeScreen() {
     <ThemedView style={styles.listStyle}>
       {isConnected ? (
         <>
-          <View className="flex flex-row items-center gap-2">
+          <View className="flex flex-row items-center gap-2 mt-2">
             <View className="bg-green-700 h-2 w-2 rounded-full" />
             <ThemedText>App is online</ThemedText>
           </View>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
 
   listStyle: {
     flex: 1,
+    paddingHorizontal: 5,
   },
   noteContainer: {
     backgroundColor: "#f0f0f0",
