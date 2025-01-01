@@ -3,6 +3,7 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  View,
   TouchableOpacity,
 } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
@@ -40,11 +41,19 @@ export default function HomeScreen() {
     <ThemedView style={styles.listStyle}>
       {isConnected ? (
         <>
-          <ThemedText className="text-blue-500">App Online</ThemedText>
-          <Text className="p-5 bg-blue-500">HELLO</Text>
+          <View className="flex flex-row items-center gap-2">
+            <View className="bg-green-700 h-2 w-2 rounded-full" />
+            <ThemedText>App is online</ThemedText>
+          </View>
+          {/* <ThemedText className="text-blue-500">App Online</ThemedText> */}
         </>
       ) : (
-        <Text> App Offline </Text>
+        <>
+          <View className="flex flex-row items-center gap-2">
+            <View className="bg-red-700 h-2 w-2 rounded-full" />
+            <ThemedText>App is offline</ThemedText>
+          </View>
+        </>
       )}
       <>
         <Text>{domainName}</Text>

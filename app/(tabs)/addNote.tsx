@@ -1,13 +1,14 @@
-import { StyleSheet, Dimensions, Text } from "react-native";
+import { StyleSheet, Dimensions, Text, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import React, { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/ThemedText";
 import { NoteContext } from "../NoteContext";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function AddNotes() {
   const [note, setNote] = useState<string>("");
-  const { isConnected, addNewNotes  } = useContext(NoteContext);
+  const { isConnected, addNewNotes } = useContext(NoteContext);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,18 +23,26 @@ export default function AddNotes() {
       />
       {isConnected ? (
         <>
-          <ThemedText className="bg-red-700">App is online</ThemedText>
-          <Text className="bg-red-500 text-3xl text-green-900">BG RED HERE</Text>
+          <View className="flex flex-row items-center gap-2">
+            <View className="bg-green-700 h-2 w-2 rounded-full" />
+            <ThemedText>App is online</ThemedText>
+          </View>
         </>
       ) : (
         <>
-          <ThemedText>App is offline</ThemedText>
+          <View className="flex flex-row items-center gap-2">
+            <View className="bg-red-700 h-2 w-2 rounded-full" />
+            <ThemedText>App is offline</ThemedText>
+          </View>
         </>
       )}
-      <Button mode="contained" onPress={() => {
-        addNewNotes(note)
-        setNote("")
-      }}>
+      <Button
+        mode="contained"
+        onPress={() => {
+          addNewNotes(note);
+          setNote("");
+        }}
+      >
         Save
       </Button>
     </SafeAreaView>
