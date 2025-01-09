@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -7,9 +7,13 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Button } from "react-native-paper";
+import Logout from "../(auth)/logout";
+import { useAuth0 } from "react-native-auth0";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { clearSession } = useAuth0();
   return (
     <Tabs
       screenOptions={{
@@ -33,6 +37,10 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="speaker-notes" size={24} color={color} />
           ),
+          headerRight: () => <Button mode="contained" onPress={async() => {
+            await clearSession();
+            <Redirect href='/login' />
+          }}>Log Out</Button>,
           headerShown: true,
           // tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
