@@ -28,7 +28,7 @@ export default function HomeScreen() {
     }, [isConnected])
   );
   const router = useRouter();
-  const { user } = useAuth0();
+  const { user, getCredentials } = useAuth0();
 
   const domainName = Constants?.expoConfig?.extra?.auth0Domain;
   const clientID = Constants?.expoConfig?.extra?.auth0ClientId;
@@ -36,6 +36,28 @@ export default function HomeScreen() {
   console.log("DOMAIN NAME: ", domainName);
   console.log("CLIENT ID: ", clientID);
   console.log("USER INFO HERE: ", user);
+
+  const getLoggedUserCred = async() => {
+    const isLoggedIn = await getCredentials();
+    if(isLoggedIn){
+      return(
+        <View>
+          <Text>{isLoggedIn.idToken}</Text>
+          <Text>{isLoggedIn.accessToken}</Text>
+          <Text>{isLoggedIn.tokenType}</Text>
+          <Text>{isLoggedIn.expiresAt}</Text>
+          {/* <Text>{isLoggedIn.refreshToken}</Text> */}
+          <Text>{isLoggedIn.scope}</Text>
+        </View>
+      )
+    }else{
+      return(
+        <View>
+          <Text>No credentials available</Text>
+        </View>
+      )
+    }
+  }
 
   return (
     <ThemedView style={styles.listStyle}>
@@ -56,8 +78,9 @@ export default function HomeScreen() {
         </>
       )}
       <>
-        <Text>{domainName}</Text>
-        <Text>{clientID}</Text>
+        {/* <Text>{domainName}</Text>
+        <Text>{clientID}</Text> */}
+        {/* {getLoggedUserCred()} */}
         <FlatList
           data={notes}
           keyExtractor={(item) => item.id.toString()}

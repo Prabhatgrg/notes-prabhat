@@ -71,6 +71,12 @@ function RootLayoutNav() {
     }
   }, [isLoading, user, router]);
 
+  useEffect(() => {
+    if (!user) {
+      <Redirect href='/login' />
+    }
+  }, [user]);
+
   if (!user) {
     <Redirect href='/(auth)/login' />
     console.log("NO USER INFO");
@@ -98,6 +104,7 @@ function RootLayoutNav() {
               <Stack.Screen name="+not-found" />
             </Stack>
           ) : (
+            // <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
             <Slot />
           )}
           <StatusBar style="auto" />
@@ -123,7 +130,7 @@ export default function RootLayout() {
   }
   const domainName = Constants?.expoConfig?.extra?.auth0Domain;
   const clientID = Constants?.expoConfig?.extra?.auth0ClientId;
-  // const { user } = useAuth0();
+  // const { isAuthenticated } = useAuth0();
   return (
     <Auth0Provider domain={domainName} clientId={clientID}>
       <RootLayoutNav />
